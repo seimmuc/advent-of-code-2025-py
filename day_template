@@ -1,0 +1,24 @@
+from common import Day, line_iterator
+
+
+class Day{{day_num}}(Day):
+    @staticmethod
+    def parse_input(input_str: str) -> None:
+        data = None
+        for line in line_iterator(input_str):
+            pass
+        return data
+
+    def solve_part1(self, input_str: str) -> str:
+        d = self.parse_input(input_str)
+        return None
+
+    def solve_part2(self, input_str: str) -> str:
+        d = self.parse_input(input_str)
+        return None
+
+
+if __name__ == '__main__':
+    from main import run_puzzle
+    run_puzzle(day={{day_num}}, part=1, s_class=Day{{day_num}}, path_prefix='..', input_file='example_input.txt')
+    run_puzzle(day={{day_num}}, part=2, s_class=Day{{day_num}}, path_prefix='..', input_file='example_input.txt')
