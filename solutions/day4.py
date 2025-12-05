@@ -1,4 +1,6 @@
-from common import Day, line_iterator, LGrid, DIRECTIONS_ALL
+from collections import deque
+
+from common import Day, line_iterator, LGrid, DIRECTIONS_ALL, Vector
 
 
 class Day4(Day):
@@ -23,19 +25,14 @@ class Day4(Day):
     def solve_part2(self, input_str: str) -> str:
         grid = self.parse_input(input_str)
         res = 0
-
-        while True:
-            removed = 0
-            for l, item in grid.scan_all():
-                if item != '@':
-                    continue
-                adjacent_roll_count = sum(int(v == '@') for _, v in grid.look_around(l, DIRECTIONS_ALL))
-                if adjacent_roll_count < 4:
-                    grid.set_cell(l, '.')
-                    removed += 1
-            if removed == 0:
-                break
-            res += removed
+        to_scan: set[Vector] = set(v for v, it in grid.scan_all() if it == '@')
+        while len(to_scan) > 0:
+            l = to_scan.pop()
+            adjacent = list(al for al, ai in grid.look_around(l, DIRECTIONS_ALL) if ai == '@')
+            if len(adjacent) < 4:
+                grid.set_cell(l, '.')
+                res += 1
+                to_scan.update(adjacent)
         return str(res)
 
 
