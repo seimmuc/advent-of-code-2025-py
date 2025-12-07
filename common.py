@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from enum import Enum
 from io import StringIO
-from typing import Iterator, Union, Generic, TypeVar, Sequence, Tuple
+from typing import Iterator, Union, Generic, TypeVar, Sequence, Tuple, Self
 
 
 class Day(ABC):
@@ -34,7 +34,7 @@ class Direction(Enum):
     DownRight = (1, 1)
 
     @property
-    def inverse(self) -> 'Direction':
+    def inverse(self) -> Self:
         return DIRECTIONS_INVERSES.get(self)
 
     @property
@@ -79,31 +79,31 @@ class Vector:
     def from_direction(direction: Direction) -> 'Vector':
         return Vector(direction.value[0], direction.value[1])
 
-    def move_in(self, direction: Direction, dist: int = 1):
+    def move_in(self, direction: Direction, dist: int = 1) -> Self:
         return self + Vector(direction.value[0] * dist, direction.value[1] * dist)
 
     @property
     def manhattan_distance(self) -> int:
         return abs(self.x) + abs(self.y)
 
-    def __add__(self, other: Union['Vector', Direction]) -> 'Vector':
+    def __add__(self, other: Union[Self, Direction]) -> Self:
         if isinstance(other, Direction):
             return self.move_in(other)
         return Vector(self.x + other.x, self.y + other.y)
 
-    def __sub__(self, other: 'Vector') -> 'Vector':
+    def __sub__(self, other: Self) -> Self:
         return Vector(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, multiplier: int) -> 'Vector':
+    def __mul__(self, multiplier: int) -> Self:
         return Vector(self.x * multiplier, self.y * multiplier)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Vector({self.x}, {self.y})'
 
-    def __eq__(self, other: 'Vector'):
+    def __eq__(self, other: Self) -> bool:
         return other is not None and self.x == other.x and self.y == other.y
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.x, self.y))
 
 
