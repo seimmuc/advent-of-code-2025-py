@@ -86,6 +86,10 @@ class Vector:
     def manhattan_distance(self) -> int:
         return abs(self.x) + abs(self.y)
 
+    @property
+    def area(self):
+        return abs(self.x) * abs(self.y)
+
     def __add__(self, other: Union[Self, Direction]) -> Self:
         if isinstance(other, Direction):
             return self.move_in(other)
@@ -195,6 +199,22 @@ class LGrid(Grid[GT]):
         for i, row in enumerate(self.lines):  # type: int, list[GT]
             row.insert(x, column[i])
         self._width += 1
+
+    def merge_overlay(self, overlay: Grid[GT], mask_vals: GT = None):
+        if overlay.width != self.width or overlay.height != self.height:
+            raise RuntimeError(f'cannot merge with overlay of different dimensions '
+                               f'({overlay.width}x{overlay.height}, expected {self.width}x{self.height})')
+        for p, v in overlay.scan_all():
+            if v == mask_vals:
+                continue
+            self.set_cell(p, v)
+
+    @classmethod
+    def create(cls, width: int, height: int, fill_item: GT) -> Self:
+        grid = cls()
+        for y in range(height):
+            grid.add_line([fill_item] * width)
+        return grid
 
 
 class GridSearch:
